@@ -25,28 +25,50 @@ It wrote the code, ran away, and now the game is unplayable.
 
 ## 📝 Document Your Experience
 
-- [ ] Describe the game's purpose.
-- [ ] Detail which bugs you found.
-- [ ] Explain what fixes you applied.
+- [x] **Purpose:** A Streamlit number-guessing game. The player guesses a
+      secret number within a difficulty-based range and limited attempts,
+      getting "higher/lower" hints and a score that rewards faster wins.
+- [x] **Bugs found:** 11 total — inverted hints, a secret that was silently
+      cast to a string on even turns (breaking comparisons), scoring that
+      *added* points for wrong guesses, a first-try win worth only 80,
+      "New Game" that didn't reset score/status/history, a range message
+      hardcoded to "1 and 100", invalid input costing an attempt, and a
+      "Hard" mode easier than "Normal".
+- [x] **Fixes applied:** Moved all game logic into `logic_utils.py`, made
+      `check_guess` return a plain outcome string with a separate
+      `hint_message()`, corrected the scoring formula, and made "New Game"
+      a full state reset. Verified with 13 pytest tests.
 
 ## 📸 Demo Walkthrough
 
 Describe your fixed game in numbered steps so a reader can follow along without watching a video:
 
-1. <!-- Describe this step -->
-2. <!-- Describe this step -->
-3. <!-- Describe this step -->
-4. <!-- Describe this step -->
-5. <!-- Add more steps as needed -->
+1. **Start the app** with `python -m streamlit run app.py` and pick a
+   difficulty in the sidebar. The info box now correctly shows the real
+   range for that difficulty (e.g. "between 1 and 20" on Easy).
+2. **Make a guess.** Enter a number and click "Submit Guess 🚀". The hint
+   is now correct — guessing too high tells you to "📉 Go LOWER!".
+3. **Watch the score.** A wrong guess always costs 5 points; it never
+   accidentally rewards you. Open "Developer Debug Info" to confirm the
+   secret stays the same across submits.
+4. **Win the game.** Guess the secret and the game ends: balloons appear,
+   a win message shows your final score, and further guesses are blocked.
+   Winning on the first try scores the full 100.
+5. **Click "New Game 🔁".** Score, attempts, status, and history all reset
+   cleanly, and a fresh secret is drawn from the current difficulty's range.
 
 **Screenshot** *(optional)*: <!-- Insert a screenshot of your fixed, winning game here -->
 
 ## 🧪 Test Results
 
 ```
-# Paste your pytest output here, e.g.:
-# pytest tests/
-# ========================= X passed in 0.XXs =========================
+$ pytest tests/
+============================= test session starts =============================
+collected 13 items
+
+tests/test_game_logic.py .............                                    [100%]
+
+============================== 13 passed in 0.02s =============================
 ```
 
 ## 🚀 Stretch Features
